@@ -10,7 +10,7 @@ Landfall has asked mod developers not to send lots of data through Photon, which
 ### Defining RPCs
 To define an RPC, simply add the [CustomRPC] attribute to a method:
 
-```
+```cs
 [CustomRPC]
 void ChatMessage(string message)
 {
@@ -19,7 +19,7 @@ void ChatMessage(string message)
 ```
 
 To get the player who sent an RPC, add a RPCInfo as the final parameter in your RPC. You don't need to send the info yourself, it will be provided automatically if you include the parameter.
-```
+```cs
 [CustomRPC]
 void ChatMessage(string message, RPCInfo info)
 {
@@ -30,7 +30,7 @@ void ChatMessage(string message, RPCInfo info)
 ```
 
 You can add as many arbitrary parameters to an RPC as you want, and they will automatically be synced when used.
-```
+```cs
 [CustomRPC]
 void DoSomething(string message, int num, ulong id)
 {
@@ -43,7 +43,7 @@ void DoSomething(string message, int num, ulong id)
 ### Calling RPCs
 To call an RPC, first register the object with the network. Each mod needs a **unique** ID, which is just a random number you define unique to your mod. This is to make sure mods don't accidentally call an RPC on a separate mod. I recommend you store the modId as a constant somewhere in your program.
 
-```
+```cs
 const uint modId = 12345;
 
 void Start()
@@ -54,12 +54,12 @@ void Start()
 
 To call the RPC, use `MyceliumNetwork.RPC`. Pass in the mod ID, the name of the RPC you are calling, what kind of reliability you want the RPC to have (leave it at Reliable if you are unsure), and the parameters to pass in the RPC:
 
-```
+```cs
 // This will call the RPC named ChatMessage on all clients, with the parameter "Hello World!" being sent.
 MyceliumNetwork.RPC(modId, nameof(ChatMessage), ReliableType.Reliable, "Hello World!");
 ```
 You can also call an RPC on a specific player using `MyceliumNetwork.RPCTarget`.
-```
+```cs
 // This will call the RPC named ChatMessage on only the specified player, with the parameter "Hello World!" being sent.
 MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableType.Reliable, "Hello World!");
 ```
@@ -68,7 +68,7 @@ MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableTyp
 
 To demonstrate how to define and send RPCs, there is a full demo you can access here, but this is the main important script.
 It simply demonstrates how to use the RPCs by sending all key presses between players to the console.
-```
+```cs
 using MyceliumNetworking;
 using Steamworks;
 using System;
@@ -111,7 +111,7 @@ Sometimes you only want to run an RPC on a single instance of an object, for exa
 
 Pass the ViewID of the PhotonView on your object in as the mask when registering a network object.
 
-```
+```cs
 class PlayerTest : MonoBehaviour
 {
 	void Start()
@@ -123,7 +123,7 @@ class PlayerTest : MonoBehaviour
 
 Then when calling the RPC, use the Masked variant.
 
-```
+```cs
 MyceliumNetwork.RPCMasked(modId, nameof(KillPlayer), ReliableType.Reliable, GetComponent<PhotonView>().ViewID, "You Died!");
 ```
 
@@ -145,6 +145,9 @@ Playtesting by Dubscr
 https://www.youtube.com/dubscr
 
 ## Changelog
+
+## License: Attribution-NonCommercial-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 ### 1.0.0
 - Initial Release
