@@ -324,7 +324,7 @@ namespace MyceliumNetworking
 					destination = destinationEx.Message;
 				}
 
-				Debug.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}): {ex.Message} {ex.StackTrace}");
+				RugLogger.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}): {ex.Message} {ex.StackTrace}");
 			}
 		}
 
@@ -345,7 +345,7 @@ namespace MyceliumNetworking
 				int messageSize = Marshal.SizeOf(outMessage);
 				if(messageSize > Message.MaxSize)
 				{
-					Debug.LogError($"Ignored message because its size was above the max ({messageSize}/{Message.MaxSize})");
+					RugLogger.LogError($"Ignored message because its size was above the max ({messageSize}/{Message.MaxSize})");
 					SteamNetworkingMessage_t.Release(outMessages[i]);
 					continue;
 				}
@@ -390,7 +390,7 @@ namespace MyceliumNetworking
 						destination = destinationEx.Message;
 					}
 
-					Debug.LogError($"Error executing RPC from {sender} ({destination}): {ex.Message} {ex.StackTrace}");
+					RugLogger.LogError($"Error executing RPC from {sender} ({destination}): {ex.Message} {ex.StackTrace}");
 				}
 
 				SteamNetworkingMessage_t.Release(outMessages[i]);
