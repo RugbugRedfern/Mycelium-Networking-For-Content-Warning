@@ -66,7 +66,7 @@ MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableTyp
 
 ### Keypress Syncing Demo
 
-To demonstrate how to define and send RPCs, there is a full demo you can access here, but this is the main important script.
+To demonstrate how to define and send RPCs, there is a full demo you can access [here](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning-Demo), but this is the main important script.
 It simply demonstrates how to use the RPCs by sending all key presses between players to the console.
 ```cs
 using MyceliumNetworking;
@@ -148,6 +148,9 @@ https://www.youtube.com/dubscr
 https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 ## Changelog
+
+### 1.0.1
+- Updated README
 
 ### 1.0.0
 - Initial Release
