@@ -43,47 +43,74 @@ namespace MyceliumNetworking
 		/// <summary>
 		/// The current lobby
 		/// </summary>
-		public static CSteamID Lobby;
+		public static CSteamID Lobby { get; private set; }
+
+		/// <summary>
+		/// Are we in a lobby?
+		/// </summary>
+		public static bool InLobby { get; private set; }
 
 		/// <summary>
 		/// Called when a lobby is created by the local player
 		/// </summary>
-		public static Action LobbyCreated;
+		public static event Action LobbyCreated;
 
 		/// <summary>
 		/// Called when a lobby is entered by the local player
 		/// </summary>
-		public static Action LobbyEntered;
+		public static event Action LobbyEntered;
 
 		/// <summary>
 		/// Called when a lobby is left by the local player
 		/// </summary>
-		public static Action LobbyLeft;
+		public static event Action LobbyLeft;
 
 		/// <summary>
 		/// Called when lobby creation has failed on the local player
 		/// </summary>
-		public static Action<EResult> LobbyCreationFailed;
+		public static event Action<EResult> LobbyCreationFailed;
 
 		/// <summary>
 		/// Called a player enters the lobby
 		/// </summary>
-		public static Action<CSteamID> PlayerEntered;
+		public static event Action<CSteamID> PlayerEntered;
 
 		/// <summary>
 		/// Called when a player leaves the lobby
 		/// </summary>
-		public static Action<CSteamID> PlayerLeft;
+		public static event Action<CSteamID> PlayerLeft;
+
+		/// <summary>
+		/// Called when a player's data is updated, or when a player is promoted to host.
+		/// If the new player data value is the same as the previous, this will not be called.
+		/// Provides the CSteamID of the player who's data was changed, and a list of the keys of player data that were changed.
+		/// </summary>
+		public static event Action<CSteamID, List<string>> PlayerDataUpdated;
+
+		/// <summary>
+		/// Called when the lobby's data is updated, when a lobby is created, joined, or when the lobby owner changes.
+		/// If the new lobby data value is the same as the previous, this will not be called.
+		/// Provides a list of the keys of lobby data that were changed.
+		/// </summary>
+		public static event Action<List<string>> LobbyDataUpdated;
+
+		static List<string> lobbyDataKeys = new List<string>();
+		static List<string> playerDataKeys = new List<string>();
+
+		static Dictionary<CSteamID, Dictionary<string, string>> lastPlayerData = new Dictionary<CSteamID, Dictionary<string, string>>();
+		static Dictionary<string, string> lastLobbyData = new Dictionary<string, string>();
 
 		static Callback<LobbyEnter_t> _c2;
 		static Callback<LobbyCreated_t> _c3;
 		static Callback<LobbyChatUpdate_t> _c4;
+		static Callback<LobbyDataUpdate_t> _c5;
 
 		public static void Initialize()
 		{
 			_c2 = Callback<LobbyEnter_t>.Create(OnLobbyEnter);
 			_c3 = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
 			_c4 = Callback<LobbyChatUpdate_t>.Create(OnLobbyChatUpdate);
+			_c5 = Callback<LobbyDataUpdate_t>.Create(OnLobbyDataUpdate);
 		}
 
 		static void OnLobbyEnter(LobbyEnter_t param)
@@ -91,6 +118,7 @@ namespace MyceliumNetworking
 			RugLogger.Log($"Entering lobby {param.m_ulSteamIDLobby}");
 
 			Lobby = new CSteamID(param.m_ulSteamIDLobby);
+			InLobby = true;
 
 			RefreshPlayerList();
 
@@ -128,6 +156,14 @@ namespace MyceliumNetworking
 					PlayerEntered?.Invoke(steamID);
 					break;
 				case EChatMemberStateChange.k_EChatMemberStateChangeLeft:
+					if(steamID == SteamUser.GetSteamID())
+					{
+						lastLobbyData.Clear();
+						lastPlayerData.Clear();
+						InLobby = false;
+						LobbyLeft?.Invoke();
+					}
+					break;
 				case EChatMemberStateChange.k_EChatMemberStateChangeDisconnected:
 				case EChatMemberStateChange.k_EChatMemberStateChangeKicked:
 				case EChatMemberStateChange.k_EChatMemberStateChangeBanned:
@@ -210,6 +246,240 @@ namespace MyceliumNetworking
 		public static void RPC(uint modId, string methodName, ReliableType reliable, params object[] parameters)
 		{
 			RPCMasked(modId, methodName, reliable, 0, parameters);
+		}
+		#endregion
+
+		#region LobbyData
+		public static void RegisterLobbyDataKey(string key)
+		{
+			if(lobbyDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Lobby data key {key} is already defined");
+			}
+			else
+			{
+				lobbyDataKeys.Add(key);
+			}
+		}
+
+		public static void RegisterPlayerDataKey(string key)
+		{
+			if(playerDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Player data key {key} is already defined");
+			}
+			else
+			{
+				playerDataKeys.Add(key);
+			}
+		}
+
+		static void OnLobbyDataUpdate(LobbyDataUpdate_t param)
+		{
+			// OnLobbyDataUpdate is also triggered by a RequestLobbyData call, so we have to check
+			if(!InLobby)
+				return;
+
+			if(param.m_ulSteamIDLobby != Lobby.m_SteamID)
+				return;
+
+			if(param.m_ulSteamIDLobby == param.m_ulSteamIDMember) // Lobby data update
+			{
+				List<string> changedKeys = new List<string>();
+
+				for(int i = 0; i < lobbyDataKeys.Count; i++)
+				{
+					string key = lobbyDataKeys[i];
+					string data = SteamMatchmaking.GetLobbyData(Lobby, key);
+
+					if(lastLobbyData.ContainsKey(key))
+					{
+						if(!lastLobbyData[key].Equals(data))
+						{
+							changedKeys.Add(key);
+						}
+					}
+					else
+					{
+						changedKeys.Add(key);
+					}
+
+					lastLobbyData[key] = data;
+				}
+
+				// sometimes nothing changes
+				if(changedKeys.Count > 0)
+				{
+					LobbyDataUpdated?.Invoke(changedKeys);
+				}
+			}
+			else // Player data update
+			{
+				var player = new CSteamID(param.m_ulSteamIDMember);
+
+				if(!lastPlayerData.ContainsKey(player))
+				{
+					lastPlayerData[player] = new Dictionary<string, string>();
+				}
+
+				List<string> changedKeys = new List<string>();
+
+				for(int i = 0; i < playerDataKeys.Count; i++)
+				{
+					string key = playerDataKeys[i];
+					string data = SteamMatchmaking.GetLobbyMemberData(Lobby, player, key);
+
+					if(lastPlayerData[player].ContainsKey(key))
+					{
+						if(!lastPlayerData[player][key].Equals(data))
+						{
+							changedKeys.Add(key);
+						}
+					}
+					else
+					{
+						changedKeys.Add(key);
+					}
+
+					lastPlayerData[player][key] = data;
+				}
+
+				// sometimes nothing changes
+				if(changedKeys.Count > 0)
+				{
+					PlayerDataUpdated?.Invoke(player, changedKeys);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Assign a value to a lobby data key. Syncs for all players. Invokes LobbyDataUpdated. Can only be called by the lobby host.
+		/// </summary>
+		/// <param name="key">The key to set</param>
+		/// <param name="value">The value to assign the key</param>
+		public static void SetLobbyData(string key, object value)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot set lobby data when not in lobby.");
+				return;
+			}
+
+			if(!SteamMatchmaking.SetLobbyData(Lobby, key, value.ToString()))
+			{
+				RugLogger.LogError("Error setting lobby data.");
+			}
+		}
+
+		/// <summary>
+		/// Check if a lobby data key is defined. Can be called by any player.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns>True if the key is defined</returns>
+		public static bool HasLobbyData(string key)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot get lobby data when not in lobby.");
+				return false;
+			}
+
+			string value = SteamMatchmaking.GetLobbyData(Lobby, key.ToString());
+
+			return !string.IsNullOrEmpty(value);
+		}
+
+		/// <summary>
+		/// Get the value of a lobby data key for a specific lobby. Can be called by any player.
+		/// </summary>
+		/// <typeparam name="T">The type of the data (ex. int, float, bool)</typeparam>
+		/// <param name="key">The key to get the value of</param>
+		/// <returns>The value from the key</returns>
+		public static T GetLobbyData<T>(string key)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot get lobby data when not in lobby.");
+				return default(T);
+			}
+
+			string value = SteamMatchmaking.GetLobbyData(Lobby, key.ToString());
+
+			try
+			{
+				return (T)Convert.ChangeType(value, typeof(T));
+			}
+			catch(Exception ex)
+			{
+				Debug.LogError($"Could not parse lobby data [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
+			}
+
+			return default(T);
+		}
+
+		/// <summary>
+		/// Assign a value to a player data key. Syncs for all players. Invokes PlayerDataUpdated. Can be called by any player to set their own data.
+		/// </summary>
+		/// <param name="key">The key to set</param>
+		/// <param name="value">The value to assign the key</param>
+		public static void SetPlayerData(string key, object value)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot set player data when not in lobby.");
+				return;
+			}
+
+			SteamMatchmaking.SetLobbyMemberData(Lobby, key.ToString(), value.ToString());
+		}
+
+		/// <summary>
+		/// Check if a player data key is defined. Can be called by any player, on any player.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns>True if the key is defined</returns>
+		public static bool HasPlayerData(CSteamID player, string key)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot get player data when not in lobby.");
+				return false;
+			}
+
+			string value = SteamMatchmaking.GetLobbyMemberData(MyceliumNetwork.Lobby, player, key.ToString());
+
+			return !string.IsNullOrEmpty(value);
+		}
+
+		/// <summary>
+		/// Get the data associated with a key for a player. Can be called by any player, on any player.
+		/// Note that player data takes a few hundred miliseconds to load in before it can be accessed when a player first joins.
+		/// </summary>
+		/// <returns>The value from the key</returns>
+		public static T GetPlayerData<T>(CSteamID player, string key)
+		{
+			if(!InLobby)
+			{
+				RugLogger.LogError("Cannot get player data when not in lobby.");
+				return default(T);
+			}
+
+			string value = SteamMatchmaking.GetLobbyMemberData(Lobby, player, key.ToString());
+
+			// If this key has been set
+			if(!string.IsNullOrEmpty(value))
+			{
+				try
+				{
+					return (T)Convert.ChangeType(value, typeof(T));
+				}
+				catch(Exception ex)
+				{
+					Debug.LogError($"Could not parse [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
+				}
+			}
+
+			return default(T);
 		}
 		#endregion
 

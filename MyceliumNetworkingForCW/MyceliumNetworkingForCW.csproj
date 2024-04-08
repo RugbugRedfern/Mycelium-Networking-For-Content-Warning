@@ -38,11 +38,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <!-- Enable Nullable for better IDE null-checking -->
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <!-- Set NuGet Sources -->
   <PropertyGroup>
     <RestoreAdditionalProjectSources>
