@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- BepInEx Properties -->
   <PropertyGroup>
-    <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
-    <Product>MyceliumNetworking</Product>
+    <AssemblyName>RugbugRedfern.MyceliumNetworking</AssemblyName>
+    <Product>Mycelium Networking</Product>
   </PropertyGroup>
 
   <!-- NuGet Package Info -->
