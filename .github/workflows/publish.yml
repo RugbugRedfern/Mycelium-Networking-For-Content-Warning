@@ -114,4 +114,4 @@ jobs:
         env:
           TCLI_AUTH_TOKEN: ${{ secrets.THUNDERSTORE_API_TOKEN }}
         run: |
-          dotnet tcli publish --config-path MyceliumNetworking/ts-assets/thunderstore.toml --file MyceliumNetworking/dist/*.zip
+          dotnet tcli publish --config-path ./MyceliumNetworkingForCW/ts-assets/thunderstore.toml --file ./MyceliumNetworkingForCW/dist/*.zip
