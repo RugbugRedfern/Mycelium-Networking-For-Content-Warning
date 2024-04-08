@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- BepInEx Properties -->
   <PropertyGroup>
     <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
@@ -106,4 +106,6 @@
   <ItemGroup Condition="$(CI) == 'true'">
     <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" Publicize="true" PrivateAssets="all"/>
   </ItemGroup>
+  
+  <Import Project="./pack-for-thunderstore.csproj" />
 </Project>
