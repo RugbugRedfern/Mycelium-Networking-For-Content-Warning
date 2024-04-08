@@ -324,7 +324,7 @@ namespace MyceliumNetworking
 					destination = destinationEx.Message;
 				}
 
-				RugLogger.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}): {ex.Message} {ex.StackTrace}");
+				RugLogger.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}):\n{ex.InnerException} {ex.StackTrace}");
 			}
 		}
 
