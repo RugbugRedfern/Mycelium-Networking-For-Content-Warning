@@ -146,11 +146,3 @@ https://www.youtube.com/dubscr
 
 ## Code License: Attribution-NonCommercial-ShareAlike 4.0 International
 https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-## Changelog
-
-### 1.0.1
-- Updated README
-
-### 1.0.0
-- Initial Release
