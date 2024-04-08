@@ -223,7 +223,7 @@ namespace MyceliumNetworking
 		{
 			if(data.Length > Message.MaxSize)
 			{
-				RugLogger.LogError($"<b>MyceliumNetwork</b> Size of message ({data.Length} bytes) is greater than the max allowed size ({Message.MaxSize}).");
+				RugLogger.LogError($"Size of message ({data.Length} bytes) is greater than the max allowed size ({Message.MaxSize}).");
 				return;
 			}
 
