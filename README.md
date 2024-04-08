@@ -134,15 +134,15 @@ Join the Content Warning Modding discord and @ me (@rugdev): https://discord.gg/
 
 ## Credits
 [![](https://i.ibb.co/pLJ3Zrn/a-mod-by-rugbug.png)](https://www.youtube.com/RugbugRedfern)
-Programming by Rugbug Redfern
 
-https://www.youtube.com/RugbugRedfern
+### Contributors
+- [Rugbug Redfern](https://rugbug.net/)
+- Sprinkles
+- [zatrit](https://github.com/zatrit)
+- [Xilophor](https://github.com/Xilophor)
 
-Additional help and Mask concept by Sprinkles
-
-Playtesting by Dubscr
-
-https://www.youtube.com/dubscr
+### Playtesting
+- [Dubscr](https://www.youtube.com/dubscr)
 
 ## Code License: Attribution-NonCommercial-ShareAlike 4.0 International
 https://creativecommons.org/licenses/by-nc-sa/4.0/
