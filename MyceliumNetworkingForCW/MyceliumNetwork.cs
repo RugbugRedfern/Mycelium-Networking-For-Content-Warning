@@ -218,7 +218,7 @@ namespace MyceliumNetworking
 		/// </summary>
 		/// <param name="data">The data to send</param>
 		/// <param name="target">The target player to send the data to</param>
-		/// <param name="reliable">True for reliable but slow, false for unreliable but fast</param>
+		/// <param name="reliable">The reliability to use in sending the data</param>
 		static void SendBytes(byte[] data, CSteamID target, ReliableType reliable)
 		{
 			if(data.Length > Message.MaxSize)
