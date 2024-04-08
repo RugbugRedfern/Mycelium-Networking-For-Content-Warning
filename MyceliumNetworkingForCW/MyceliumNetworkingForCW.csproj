@@ -15,7 +15,7 @@
 
     <PackageIcon>icon_128x128.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseExpression>CC-BY-NC-SA-4.0</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 
     <PackageProjectUrl>https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning</RepositoryUrl>
@@ -77,6 +77,7 @@
   <ItemGroup>
     <None Include="$(ProjectDir)../README.md" Pack="true" PackagePath="/" />
     <None Include="$(ProjectDir)./ts-assets/icon_128x128.png" Pack="true" PackagePath="/" />
+    <None Include="$(ProjectDir)../LICENSE.txt" Pack="true" PackagePath="/"/>
   </ItemGroup>
 
   <!-- Primary Package References -->
