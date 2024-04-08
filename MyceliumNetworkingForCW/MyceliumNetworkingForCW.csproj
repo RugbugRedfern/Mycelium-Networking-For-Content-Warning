@@ -1,8 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <!-- BepInEx Properties -->
   <PropertyGroup>
     <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
     <Product>MyceliumNetworking</Product>
+  </PropertyGroup>
+
+  <!-- NuGet Package Info -->
+  <PropertyGroup>
+    <PackageId>RugbugRedfern.MyceliumNetworking.CW</PackageId>
+    <Title>MyceliumNetworking For CW</Title>
+    <Authors>RugbugRedfern</Authors>
+    <PackageTags>contentwarning;content;warning;networking</PackageTags>
+
+    <PackageIcon>icon_128x128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>CC-BY-NC-SA-4.0</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <!-- Set Mod Version with MinVer -->
@@ -55,6 +71,12 @@
     -->
     <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
   </PropertyGroup>
+
+  <!-- NuGet Include README & Icon -->
+  <ItemGroup>
+    <None Include="$(ProjectDir)../README.md" Pack="true" PackagePath="/" />
+    <None Include="$(ProjectDir)./ts-assets/icon_128x128.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
 
   <!-- Primary Package References -->
   <ItemGroup>
