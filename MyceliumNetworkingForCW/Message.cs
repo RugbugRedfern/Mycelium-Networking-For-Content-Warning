@@ -12,7 +12,7 @@ namespace MyceliumNetworking
 	public class Message : IDisposable
 	{
 		// Max size of a message, in bytes
-		public static int MaxSize { get; private set; } = 2048;
+		public static int MaxSize { get; private set; } = Steamworks.Constants.k_cbMaxSteamNetworkingSocketsMessageSizeSend;
 
 		public string GetDestination() => $"{ModID}: {MethodName}";
 
