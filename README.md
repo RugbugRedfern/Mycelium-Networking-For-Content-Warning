@@ -1,7 +1,10 @@
 # An easy to use networking library for sending custom RPCs through Steam.
 
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RugbugRedfern/Mycelium-Networking-For-Content-Warning/build.yml?style=for-the-badge&logo=github)](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning/actions/workflows/build.yml)
+[![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/RugbugRedfern/MyceliumNetworking?style=for-the-badge&logo=thunderstore&logoColor=white&color=%23328EFF)](https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/)
+
 ## A note
-Landfall has asked mod developers not to send lots of data through Photon, which is the networking solution mainly used by the game. This is because they have to pay for all the bandwidth that modders use. To solve this issue, this mod was created to be used as an alternative to Photon. With MyceliumNetworking, RPCs can be used in a very similar fashion to Photon without comprimising on features.
+Landfall has asked mod developers not to send lots of data through Photon, which is the networking solution mainly used by the game. This is because they have to pay for all the bandwidth that modders use. To solve this issue, this mod was created to be used as an alternative to Photon. With MyceliumNetworking, RPCs can be used in a very similar fashion to Photon without compromising on features.
 
 ## Usage
 1. Add MyceliumNetworkingForCW.dll as a reference in your Visual Studio solution.
