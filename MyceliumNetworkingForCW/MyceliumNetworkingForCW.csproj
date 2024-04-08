@@ -1,22 +1,87 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <!-- BepInEx Properties -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyceliumNetworkingForCW</RootNamespace>
     <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
-    <LangVersion>latest</LangVersion>
-
-    <NoWarn>NU1701</NoWarn>
+    <Product>MyceliumNetworking</Product>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  <!-- Set Mod Version with MinVer -->
+  <Target Name="SetModVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+    <PropertyGroup>
+      <PlainVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</PlainVersion>
+      <BepInExPluginVersion>$(PlainVersion)</BepInExPluginVersion>
+    </PropertyGroup>
+  </Target>
 
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.10" />
-    <PackageReference Include="ContentWarning.GameLibs.Steam" Version="0.1.7-a-ngd.0" />
+  <!-- Project Properties -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>MyceliumNetworkingForCW</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Enable Nullable for better IDE null-checking -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- Set NuGet Sources -->
+  <PropertyGroup>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+  </PropertyGroup>
+
+  <!-- Set MinVer Tag & Prerelease Properties -->
+  <PropertyGroup>
+    <MinVerDefaultPreReleaseIdentifiers>dev</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <!-- Disable Publicizer Warnings -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+  </PropertyGroup>
+
+  <!-- Embed Debug Symbols for Easier Debugging -->
+  <PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <!--
+    Trim the project path to prevent players from potentially
+    viewing Private Information in stack traces.
+    -->
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
+  </PropertyGroup>
+
+  <!-- Primary Package References -->
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all"/>
+    <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all"/>
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all"/>
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.10" PrivateAssets="all"/>
+    <PackageReference Include="MinVer" Version="4.*" PrivateAssets="all"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
+  </ItemGroup>
+
+  <!-- References - Game Assemblies -->
+  <ItemGroup Condition="$(CI) != 'true'">
+    <Reference Include="Assembly-CSharp" Publicize="true" Private="false">
+      <HintPath>$(ManagedDirectory)Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Steamworks.NET" Private="false">
+      <HintPath>$(ManagedDirectory)com.rlabrecque.steamworks.net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Package References - Game Assemblies -->
+  <ItemGroup Condition="$(CI) == 'true'">
+    <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" Publicize="true" PrivateAssets="all"/>
   </ItemGroup>
 </Project>
