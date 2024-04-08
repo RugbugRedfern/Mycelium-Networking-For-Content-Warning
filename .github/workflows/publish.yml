@@ -104,7 +104,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: thunderstore-build
-          path: MyceliumNetworkingForCW/dist/*.zip
+          path: MyceliumNetworkingForCW/dist
 
       - name: Restore Tools
         run: |
