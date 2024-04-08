@@ -1,0 +1,57 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Setup .NET Env
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.203"
+
+      - name: Restore Solution
+        run: |
+          dotnet restore
+          dotnet tool restore
+
+      - name: Pack Solution
+        run: |
+          dotnet pack --configuration Release
+          
+      - name: Upload Thunderstore Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thunderstore-build
+          path: MyceliumNetworkingForCW/dist/*.zip
+
+      - name: Upload NuPkg Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg-build
+          path: MyceliumNetworkingForCW/bin/Release/*.nupkg
+
+      - name: Build Debug
+        run: |
+          dotnet build --configuration Debug
+
+      - name: Rename Debug Build
+        run: |
+          mv "./MyceliumNetworkingForCW/bin/Debug/netstandard2.1/MyceliumNetworkingForCW.dll" "./MyceliumNetworkingForCW/bin/Debug/netstandard2.1/MyceliumNetworkingForCW-Debug.dll"
+
+      - name: Upload Debug Dll
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-build
+          path: MyceliumNetworkingForCW/bin/Debug/netstandard2.1/MyceliumNetworkingForCW-Debug.dll

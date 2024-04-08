@@ -6,19 +6,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MyceliumNetworkingForCW;
 using UnityEngine;
 
 namespace MyceliumNetworking
 {
-	[BepInPlugin(modGUID, modName, modVersion)]
+	[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class PluginLoader : BaseUnityPlugin
     {
-		const string modGUID = "RugbugRedfern.MyceliumNetworking";
-		const string modName = "Mycelium Networking";
-		const string modVersion = "1.0.0";
 		static bool initialized;
-
-		readonly Harmony harmony = new Harmony(modGUID);
 
 		void Awake()
 		{
@@ -27,11 +23,11 @@ namespace MyceliumNetworking
 
 			initialized = true;
 
-			RugLogger.Initialize(modGUID);
+			RugLogger.Initialize(MyPluginInfo.PLUGIN_GUID);
 
-			harmony.PatchAll(Assembly.GetExecutingAssembly());
+			Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
-			RugLogger.Log("MyceliumNetworking Starting " + modVersion);
+			RugLogger.Log("MyceliumNetworking Starting " + MyPluginInfo.PLUGIN_VERSION);
 
 			MyceliumNetwork.Initialize();
 

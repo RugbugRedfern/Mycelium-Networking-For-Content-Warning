@@ -1,0 +1,17 @@
+<Project>
+    <!-- Custom Variables -->
+    <PropertyGroup>
+        <GameDirectory>.../Content Warning/</GameDirectory>
+        <PluginsDirectory>.../Content Warning/BepInEx/plugins/</PluginsDirectory>
+    </PropertyGroup>
+
+    <!-- Game Directory -->
+    <PropertyGroup>
+        <ManagedDirectory>$(GameDirectory)Content Warning_Data/Managed/</ManagedDirectory>
+    </PropertyGroup>
+
+    <!-- Copy to Plugin Directory for Quicker Testing -->
+    <Target Name="CopyFiles" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PluginsDirectory)"/>
+    </Target>
+</Project>
