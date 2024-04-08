@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <!-- BepInEx Properties -->
   <PropertyGroup>
-    <AssemblyName>RugbugRedfern.MyceliumNetworking</AssemblyName>
+    <BepInExPluginGuid>RugbugRedfern.MyceliumNetworking</BepInExPluginGuid>
+    <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
     <Product>Mycelium Networking</Product>
   </PropertyGroup>
 
@@ -32,7 +33,7 @@
   <!-- Project Properties -->
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>MyceliumNetworkingForCW</RootNamespace>
+    <RootNamespace>MyceliumNetworking</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
