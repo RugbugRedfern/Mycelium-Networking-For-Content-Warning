@@ -368,8 +368,7 @@ namespace MyceliumNetworking
 
 			if(!lobbyDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
-				return;
+				RugLogger.LogWarning($"Accessing lobby data for unregistered key '{key}'. This might not exist.");
 			}
 
 			if(!SteamMatchmaking.SetLobbyData(Lobby, key, value.ToString()))
@@ -393,8 +392,7 @@ namespace MyceliumNetworking
 
 			if(!lobbyDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
-				return false;
+				RugLogger.LogWarning($"Accessing lobby data for unregistered key '{key}'. This might not exist.");
 			}
 
 			string value = SteamMatchmaking.GetLobbyData(Lobby, key.ToString());
@@ -418,8 +416,7 @@ namespace MyceliumNetworking
 
 			if(!lobbyDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
-				return default(T);
+				RugLogger.LogWarning($"Accessing lobby data for unregistered key '{key}'. This might not exist.");
 			}
 
 			string value = SteamMatchmaking.GetLobbyData(Lobby, key.ToString());
@@ -451,8 +448,7 @@ namespace MyceliumNetworking
 
 			if(!playerDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
-				return;
+				RugLogger.LogWarning($"Accessing player data for unregistered key '{key}'. This might not exist.");
 			}
 
 			SteamMatchmaking.SetLobbyMemberData(Lobby, key.ToString(), value.ToString());
@@ -473,8 +469,7 @@ namespace MyceliumNetworking
 
 			if(!playerDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
-				return false;
+				RugLogger.LogWarning($"Accessing player data for unregistered key '{key}'. This might not exist.");
 			}
 
 			string value = SteamMatchmaking.GetLobbyMemberData(MyceliumNetwork.Lobby, player, key.ToString());
@@ -497,8 +492,7 @@ namespace MyceliumNetworking
 
 			if(!playerDataKeys.Contains(key))
 			{
-				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
-				return default(T);
+				RugLogger.LogWarning($"Accessing player data for unregistered key '{key}'. This might not exist.");
 			}
 
 			string value = SteamMatchmaking.GetLobbyMemberData(Lobby, player, key.ToString());
