@@ -125,6 +125,15 @@ namespace MyceliumNetworking
 			LobbyEntered?.Invoke();
 		}
 
+		// called from SteamLobbyHandlerPatches
+		internal static void OnLobbyLeft()
+		{
+			lastLobbyData.Clear();
+			lastPlayerData.Clear();
+			InLobby = false;
+			LobbyLeft?.Invoke();
+		}
+
 		static void OnLobbyCreated(LobbyCreated_t param)
 		{
 			RugLogger.Log($"Created lobby {param.m_eResult}");
@@ -156,14 +165,6 @@ namespace MyceliumNetworking
 					PlayerEntered?.Invoke(steamID);
 					break;
 				case EChatMemberStateChange.k_EChatMemberStateChangeLeft:
-					if(steamID == SteamUser.GetSteamID())
-					{
-						lastLobbyData.Clear();
-						lastPlayerData.Clear();
-						InLobby = false;
-						LobbyLeft?.Invoke();
-					}
-					break;
 				case EChatMemberStateChange.k_EChatMemberStateChangeDisconnected:
 				case EChatMemberStateChange.k_EChatMemberStateChangeKicked:
 				case EChatMemberStateChange.k_EChatMemberStateChangeBanned:
@@ -411,7 +412,7 @@ namespace MyceliumNetworking
 			}
 			catch(Exception ex)
 			{
-				Debug.LogError($"Could not parse lobby data [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
+				RugLogger.LogError($"Could not parse lobby data [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
 			}
 
 			return default(T);
@@ -475,7 +476,7 @@ namespace MyceliumNetworking
 				}
 				catch(Exception ex)
 				{
-					Debug.LogError($"Could not parse [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
+					RugLogger.LogError($"Could not parse [{key}, {value}] as {typeof(T).Name}: {ex.Message}");
 				}
 			}
 
