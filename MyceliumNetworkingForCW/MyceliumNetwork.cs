@@ -366,6 +366,12 @@ namespace MyceliumNetworking
 				return;
 			}
 
+			if(!lobbyDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
+				return;
+			}
+
 			if(!SteamMatchmaking.SetLobbyData(Lobby, key, value.ToString()))
 			{
 				RugLogger.LogError("Error setting lobby data.");
@@ -385,6 +391,12 @@ namespace MyceliumNetworking
 				return false;
 			}
 
+			if(!lobbyDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
+				return false;
+			}
+
 			string value = SteamMatchmaking.GetLobbyData(Lobby, key.ToString());
 
 			return !string.IsNullOrEmpty(value);
@@ -401,6 +413,12 @@ namespace MyceliumNetworking
 			if(!InLobby)
 			{
 				RugLogger.LogError("Cannot get lobby data when not in lobby.");
+				return default(T);
+			}
+
+			if(!lobbyDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access lobby data for unregistered key '{key}'.");
 				return default(T);
 			}
 
@@ -431,6 +449,12 @@ namespace MyceliumNetworking
 				return;
 			}
 
+			if(!playerDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
+				return;
+			}
+
 			SteamMatchmaking.SetLobbyMemberData(Lobby, key.ToString(), value.ToString());
 		}
 
@@ -444,6 +468,12 @@ namespace MyceliumNetworking
 			if(!InLobby)
 			{
 				RugLogger.LogError("Cannot get player data when not in lobby.");
+				return false;
+			}
+
+			if(!playerDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
 				return false;
 			}
 
@@ -462,6 +492,12 @@ namespace MyceliumNetworking
 			if(!InLobby)
 			{
 				RugLogger.LogError("Cannot get player data when not in lobby.");
+				return default(T);
+			}
+
+			if(!playerDataKeys.Contains(key))
+			{
+				RugLogger.LogError($"Cannot access player data for unregistered key '{key}'.");
 				return default(T);
 			}
 
