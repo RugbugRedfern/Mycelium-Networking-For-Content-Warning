@@ -7,9 +7,11 @@
 ## A note
 Landfall has asked mod developers not to send lots of data through Photon, which is the networking solution mainly used by the game. This is because they have to pay for all the bandwidth that modders use. To solve this issue, this mod was created to be used as an alternative to Photon. With MyceliumNetworking, RPCs can be used in a very similar fashion to Photon without compromising on features.
 
-## Usage
+## Setup
 1. Add MyceliumNetworkingForCW.dll as a reference in your Visual Studio solution.
 2. Add `using MyceliumNetworking;` at the top of your script.
+
+## Using RPCs
 
 ### Defining RPCs
 To define an RPC, simply add the [CustomRPC] attribute to a method:
@@ -68,7 +70,89 @@ You can also call an RPC on a specific player using `MyceliumNetwork.RPCTarget`.
 MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableType.Reliable, "Hello World!");
 ```
 
-### Keypress Syncing Demo
+## Using LobbyData and PlayerData
+LobbyData and PlayerData are Steam features that allow you to define synced variables associated with the lobby (perfect for config syncing) or individual players. Mycelium provides an easy way to interface with them.
+
+### Lobby Data
+To use lobby data, you first need to register the key. This should happen when your mod starts for the first time.
+```cs
+void Awake()
+{
+	MyceliumNetwork.RegisterLobbyDataKey("foo");
+}
+```
+
+The host can set lobby data using `MyceliumNetwork.SetLobbyData` and passing in a registered key with a value.
+```cs
+MyceliumNetwork.SetLobbyData("foo", "bar");
+```
+
+Values are serialized as strings (Steam requires it), so any type that can be serialized as a string can be used. To serialize custom types, override the `.ToString()` method.
+```cs
+MyceliumNetwork.SetLobbyData("money", 123);
+MyceliumNetwork.SetLobbyData("scoreMultiplier", 12.52f);
+MyceliumNetwork.SetLobbyData("greeting", "Hello World!");
+```
+
+The LobbyDataUpdated callback will be fired whenever lobby data is updated by the host. It provides a list of the keys of lobby data that were changed.
+
+Any client can access lobby data using `MyceliumNetwork.GetLobbyData`. Pass in the type of the data to automatically cast it.
+```cs
+string data = MyceliumNetwork.GetLobbyData<string>("foo");
+Debug.Log(data); // Hello World
+
+int data = MyceliumNetwork.GetLobbyData<int>("money");
+Debug.Log(data); // 123
+```
+
+### Player Data
+Player data is the same as lobby data, but associated with specific players.
+
+To use player data, you first need to register the key. This should happen when your mod starts for the first time.
+```cs
+void Awake()
+{
+	MyceliumNetwork.RegisterPlayerDataKey("foo");
+}
+```
+
+Players can then set their own player data using `MyceliumNetwork.SetPlayerData` and passing in a registered key with a value. The same serialization as with LobbyData applies to PlayerData.
+```cs
+MyceliumNetwork.SetPlayerData("foo", "bar");
+```
+
+The PlayerDataUpdated callback will be fired whenever player data is updated. It provides the player whose data was changed, a list of the keys of player data that were changed.
+
+Any client can access player data using `MyceliumNetwork.GetPlayerData`. Pass in the type of the data to automatically cast it.
+```cs
+string data = MyceliumNetwork.GetPlayerData<string>(MyceliumNetwork.LobbyHost, "foo");
+Debug.Log(data); // bar
+```
+
+## Using Masks
+Sometimes you only want to run an RPC on a single instance of an object, for example calling an RPC on one player. To do this, you use masks.
+
+Pass the ViewID of the PhotonView on your object in as the mask when registering a network object.
+
+```cs
+class PlayerTest : MonoBehaviour
+{
+	void Start()
+	{
+		MyceliumNetwork.RegisterNetworkObject(this, BasePlugin.MOD_ID, GetComponent<PhotonView>().ViewID);
+	}
+}
+```
+
+Then when calling the RPC, use the Masked variant.
+
+```cs
+MyceliumNetwork.RPCMasked(modId, nameof(KillPlayer), ReliableType.Reliable, GetComponent<PhotonView>().ViewID, "You Died!");
+```
+
+A masked RPC will only be called on objects with the same mask. Using this, you can make the RPC only be called on a single PhotonView, synced across clients.
+
+## Keypress Syncing Demo
 
 To demonstrate how to define and send RPCs, there is a full demo you can access [here](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning-Demo), but this is the main important script.
 It simply demonstrates how to use the RPCs by sending all key presses between players to the console.
@@ -109,29 +193,6 @@ namespace MyceliumNetworkingTest
 }
 ```
 ![](https://i.ibb.co/DY9P9sn/image.png)
-
-### Using Masks
-Sometimes you only want to run an RPC on a single instance of an object, for example calling an RPC on one player. To do this, you use masks.
-
-Pass the ViewID of the PhotonView on your object in as the mask when registering a network object.
-
-```cs
-class PlayerTest : MonoBehaviour
-{
-	void Start()
-	{
-		MyceliumNetwork.RegisterNetworkObject(this, BasePlugin.MOD_ID, GetComponent<PhotonView>().ViewID);
-	}
-}
-```
-
-Then when calling the RPC, use the Masked variant.
-
-```cs
-MyceliumNetwork.RPCMasked(modId, nameof(KillPlayer), ReliableType.Reliable, GetComponent<PhotonView>().ViewID, "You Died!");
-```
-
-A masked RPC will only be called on objects with the same mask. Using this, you can make the RPC only be called on a single PhotonView, synced across clients.
 
 ### Need Help?
 Join the Content Warning Modding discord and @ me (@rugdev): https://discord.gg/yeGDSm4gFq

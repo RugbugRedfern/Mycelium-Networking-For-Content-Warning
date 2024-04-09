@@ -83,7 +83,7 @@ namespace MyceliumNetworking
 		/// <summary>
 		/// Called when a player's data is updated, or when a player is promoted to host.
 		/// If the new player data value is the same as the previous, this will not be called.
-		/// Provides the CSteamID of the player who's data was changed, and a list of the keys of player data that were changed.
+		/// Provides the CSteamID of the player whose data was changed, and a list of the keys of player data that were changed.
 		/// </summary>
 		public static event Action<CSteamID, List<string>> PlayerDataUpdated;
 
