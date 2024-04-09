@@ -3,9 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-- The LobbyLeft callback should now properly fire // NOT TESTED
+## [1.0.7]
 - Added LobbyData and PlayerData functionality, which allows you to define synced variables associated with the lobby (perfect for config syncing) or individual players
+- The LobbyLeft callback should now properly fire
 - General code cleanup
 
 ## [1.0.6]
