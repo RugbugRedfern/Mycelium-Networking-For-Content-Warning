@@ -74,7 +74,7 @@ MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableTyp
 LobbyData and PlayerData are Steam features that allow you to define synced variables associated with the lobby (perfect for config syncing) or individual players. Mycelium provides an easy way to interface with them.
 
 ### Lobby Data
-To use lobby data, you first need to register the key. This should happen when your mod starts for the first time.
+To use lobby data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the LobbyDataUpdated to fire when that key's value is change.
 ```cs
 void Awake()
 {
@@ -108,7 +108,7 @@ Debug.Log(data); // 123
 ### Player Data
 Player data is the same as lobby data, but associated with specific players.
 
-To use player data, you first need to register the key. This should happen when your mod starts for the first time.
+To use player data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the PlayerDataUpdated to fire when that key's value is change.
 ```cs
 void Awake()
 {
