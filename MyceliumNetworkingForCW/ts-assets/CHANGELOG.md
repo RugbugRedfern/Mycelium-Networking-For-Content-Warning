@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.9
+- Updated README
+
 ## 1.0.8
 - Registering LobbyData and PlayerData keys before accessing them is now optional. This makes dynamic keys easier to use, but you should always register your keys when you know them at compile time, or the LobbyDataUpdated and PlayerDataUpdated callbacks will not fire for them.
 

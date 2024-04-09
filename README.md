@@ -2,6 +2,7 @@
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RugbugRedfern/Mycelium-Networking-For-Content-Warning/build.yml?style=for-the-badge&logo=github)](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning/actions/workflows/build.yml)
 [![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/RugbugRedfern/MyceliumNetworking?style=for-the-badge&logo=thunderstore&logoColor=white&color=%23328EFF)](https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/)
+[![Thunderstore Version](https://img.shields.io/thunderstore/v/RugbugRedfern/MyceliumNetworking?style=for-the-badge&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/)
 [![NuGet Version](https://img.shields.io/nuget/v/RugbugRedfern.MyceliumNetworking.CW?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/RugbugRedfern.MyceliumNetworking.CW)
 
 ## A note
@@ -74,7 +75,7 @@ MyceliumNetwork.RPCTarget(modId, nameof(ChatMessage), targetSteamId, ReliableTyp
 LobbyData and PlayerData are Steam features that allow you to define synced variables associated with the lobby (perfect for config syncing) or individual players. Mycelium provides an easy way to interface with them.
 
 ### Lobby Data
-To use lobby data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the LobbyDataUpdated to fire when that key's value is change.
+To use lobby data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the LobbyDataUpdated callback to fire when that key's value is changed.
 ```cs
 void Awake()
 {
@@ -108,7 +109,7 @@ Debug.Log(data); // 123
 ### Player Data
 Player data is the same as lobby data, but associated with specific players.
 
-To use player data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the PlayerDataUpdated to fire when that key's value is change.
+To use player data, you first need to register the key. This should happen when your **mod starts for the first time**. This step is optional but strongly recommended. It's required if you want the PlayerDataUpdated callback to fire when that key's value is changed.
 ```cs
 void Awake()
 {
