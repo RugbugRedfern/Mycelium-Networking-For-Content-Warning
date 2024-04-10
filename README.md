@@ -48,14 +48,19 @@ void DoSomething(string message, int num, ulong id)
 ```
 
 ### Calling RPCs
-To call an RPC, first register the object with the network. Each mod needs a **unique** ID, which is just a random number you define unique to your mod. This is to make sure mods don't accidentally call an RPC on a separate mod. I recommend you store the modId as a constant somewhere in your program.
+To call an RPC, first register the object with the network. Each mod needs a **unique** ID, which is just a random number you define unique to your mod. This is to make sure mods don't accidentally call an RPC on a separate mod. I recommend you store the modId as a constant somewhere in your program. Deregister the object when it is destroyed (for singletons or static classes, it's fine to never deregister).
 
 ```cs
 const uint modId = 12345;
 
-void Start()
+void Awake()
 {
 	MyceliumNetwork.RegisterNetworkObject(this, modId);
+}
+
+void OnDestroy()
+{
+	MyceliumNetwork.DeregisterNetworkObject(this, modId);
 }
 ```
 
@@ -131,16 +136,25 @@ Debug.Log(data); // bar
 ```
 
 ## Using Masks
-Sometimes you only want to run an RPC on a single instance of an object, for example calling an RPC on one player. To do this, you use masks.
+RPCs are synced using the method name. If you have multiple methods with the same name on different objects, they will all be called when an RPC is fired. But sometimes you only want to run an RPC on a single instance of an object, for example calling an RPC on one player. To do this, you use masks.
 
 Pass the ViewID of the PhotonView on your object in as the mask when registering a network object.
 
 ```cs
 class PlayerTest : MonoBehaviour
 {
-	void Start()
+	int viewId;
+
+	void Awake()
 	{
-		MyceliumNetwork.RegisterNetworkObject(this, BasePlugin.MOD_ID, GetComponent<PhotonView>().ViewID);
+		viewId = GetComponent<PhotonView>().ViewID;
+		MyceliumNetwork.RegisterNetworkObject(this, BasePlugin.MOD_ID, viewId);
+	}
+
+	void OnDestroy()
+	{
+		// you will need to store the viewId locally, because you cannot access a PhotonView in OnDestroy.
+		MyceliumNetwork.DeregisterNetworkObject(this, BasePlugin.MOD_ID, viewId);
 	}
 }
 ```

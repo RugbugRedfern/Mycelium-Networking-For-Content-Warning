@@ -575,12 +575,12 @@ namespace MyceliumNetworking
 				}
 				else
 				{
-					throw new Exception($"The method ({modID}: {methodName}) was not found");
+					throw new Exception($"The RPC ({modID}: {methodName}) was not found");
 				}
 			}
 			else
 			{
-				throw new Exception($"The mod Id {modID} was not found (loaded mods: {string.Join(",", rpcs.Keys.ToArray())})");
+				throw new Exception($"The mod id {modID} was not found (loaded mods: {string.Join(",", rpcs.Keys.ToArray())})");
 			}
 		}
 
@@ -741,6 +741,47 @@ namespace MyceliumNetworking
 			}
 
 			RugLogger.Log($"Registered {registeredMethods} CustomRPCs for {modId}: {obj}.");
+		}
+
+		public static void DeregisterNetworkObject(object obj, uint modId, int mask = 0)
+		{
+			var t = obj.GetType();
+
+			int deregistered = 0;
+
+			foreach(var method in t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				// Get the attributes attached to the method
+				var attributes = method.GetCustomAttributes(false).OfType<CustomRPCAttribute>().ToArray();
+
+				// If there are any attributes
+				if(attributes.Any())
+				{
+					if(!rpcs.ContainsKey(modId))
+					{
+						RugLogger.Log($"Attempted to deregister RPCs for mod id {modId}, but no RPCs from that mod are loaded.");
+						return;
+					}
+
+					if(!rpcs[modId].ContainsKey(method.Name))
+					{
+						RugLogger.Log($"Attempted to deregister RPC {method.Name} for mod id {modId}, but no RPCs by that name are loaded.");
+						return;
+					}
+
+					foreach(var rpc in rpcs[modId][method.Name].ToArray())
+					{
+						if(rpc.Mask == mask)
+						{
+							rpcs[modId][method.Name].Remove(rpc);
+						}
+					}
+
+					deregistered++;
+				}
+			}
+
+			RugLogger.Log($"Deregistered {deregistered} CustomRPCs for {modId}: {obj}.");
 		}
 
 		class MessageHandler
