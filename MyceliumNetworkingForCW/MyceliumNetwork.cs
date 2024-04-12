@@ -590,6 +590,9 @@ namespace MyceliumNetworking
 			{
 				var handlers = GetMessageHandlers(message.ModID, message.MethodName);
 
+
+				bool handled = false;
+
 				foreach(var messageHandler in handlers)
 				{
 					if(messageHandler.Mask == message.Mask)
@@ -609,7 +612,14 @@ namespace MyceliumNetworking
 						}
 
 						messageHandler.Method.Invoke(messageHandler.Target, msgParams);
+
+						handled = true;
 					}
+				}
+
+				if(!handled)
+				{
+					RugLogger.LogWarning($"Dropped RPC because no registered RPCs were found matching {message.ModID}: {message.MethodName}");
 				}
 			}
 			catch(Exception ex)
@@ -625,7 +635,7 @@ namespace MyceliumNetworking
 					destination = destinationEx.Message;
 				}
 
-				RugLogger.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}):\n{ex.InnerException} {ex.StackTrace}");
+				RugLogger.LogError($"Error executing RPC from {(sender == SteamUser.GetSteamID() ? "local loopback" : sender.ToString())} ({destination}):\n{ex.InnerException}\nFull exception:\n{ex} {ex.StackTrace}");
 			}
 		}
 
