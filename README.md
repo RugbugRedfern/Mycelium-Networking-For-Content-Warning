@@ -167,6 +167,28 @@ MyceliumNetwork.RPCMasked(modId, nameof(KillPlayer), ReliableType.Reliable, GetC
 
 A masked RPC will only be called on objects with the same mask. Using this, you can make the RPC only be called on a single PhotonView, synced across clients.
 
+## Other Features
+Mycelium contains a lot of other small but useful features to make your multiplayer development easier.
+
+### Properties
+- `MycelumNetwork.Players`: Access a list of all players in the lobby
+- `MycelumNetwork.PlayerCount`: Get the count of players in the lobby
+- `MycelumNetwork.MaxPlayers`: Get maximum count of players that can fit in the Steam lobby (this is not the same as the Photon lobby)
+- `MycelumNetwork.LobbyHost`: Get the host of the lobby
+- `MycelumNetwork.IsHost`: Returns true if the local player is the lobby host
+- `MycelumNetwork.Lobby`: Get the SteamID of the lobby
+- `MycelumNetwork.InLobby`: Returns true if the local player is currently in a lobby
+
+### Events
+- `MycelumNetwork.LobbyCreated`: Called when a lobby is successfully created by the local player
+- `MycelumNetwork.LobbyCreationFailed`: Called when a lobby creation is failed by the local player
+- `MycelumNetwork.LobbyEntered`: Called when a lobby is entered by the local player
+- `MycelumNetwork.LobbyLeft`: Called when a lobby is left by the local player
+- `MycelumNetwork.PlayerEntered`: Called whenever another player enters the lobby
+- `MycelumNetwork.PlayerLeft`: Called whenever another player leaves the lobby
+- `MycelumNetwork.PlayerDataUpdated`: Called whenever a player's data is updated (including the local player)
+- `MycelumNetwork.LobbyDataUpdated`: Called when the lobby's data is updated
+
 ## Keypress Syncing Demo
 
 To demonstrate how to define and send RPCs, there is a full demo you can access [here](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning-Demo), but this is the main important script.
