@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.12
+- Fixed an issue where Lobby and Player data could not be set in the LobbyCreated callback
+
 ## 1.0.11
 - Added logging for dropped RPCs
 - More detailed RPC fail exception logging

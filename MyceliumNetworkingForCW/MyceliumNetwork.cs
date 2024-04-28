@@ -141,6 +141,7 @@ namespace MyceliumNetworking
 			if(param.m_eResult == EResult.k_EResultOK)
 			{
 				Lobby = new CSteamID(param.m_ulSteamIDLobby);
+				InLobby = true;
 
 				RefreshPlayerList();
 
@@ -589,7 +590,6 @@ namespace MyceliumNetworking
 			try
 			{
 				var handlers = GetMessageHandlers(message.ModID, message.MethodName);
-
 
 				bool handled = false;
 
