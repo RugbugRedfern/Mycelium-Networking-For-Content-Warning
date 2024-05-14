@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.13
+- Added float serialization
+
 ## 1.0.12
 - Fixed an issue where Lobby and Player data could not be set in the LobbyCreated callback
 
