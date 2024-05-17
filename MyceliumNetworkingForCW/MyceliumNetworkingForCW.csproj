@@ -91,12 +91,12 @@
 
   <!-- References - Game Assemblies -->
   <ItemGroup Condition="$(CI) != 'true'">
-	<Reference Include="Assembly-CSharp" Publicize="true" Private="false">
-		<HintPath>$(CW_References)Assembly-CSharp.dll</HintPath>
-	</Reference>
-	<Reference Include="Steamworks.NET" Private="false">
-      <HintPath>$(CW_References)com.rlabrecque.steamworks.net.dll</HintPath>
-    </Reference>
+	  <Reference Include="Assembly-CSharp" Publicize="true" Private="false">
+		  <HintPath>$(ManagedDirectory)Assembly-CSharp.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Steamworks.NET" Private="false">
+		  <HintPath>$(ManagedDirectory)com.rlabrecque.steamworks.net.dll</HintPath>
+	  </Reference>
   </ItemGroup>
 
   <!-- Package References - Game Assemblies -->
