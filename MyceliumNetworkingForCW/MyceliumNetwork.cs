@@ -373,8 +373,6 @@ namespace MyceliumNetworking
 				RugLogger.LogWarning($"Accessing lobby data for unregistered key '{key}'. This might not exist.");
 			}
 
-            
-
             if (!SteamMatchmaking.SetLobbyData(Lobby, key, (string)Convert.ChangeType(value, typeof(string), CultureInfo.InvariantCulture)))
 			{
 				RugLogger.LogError("Error setting lobby data.");
