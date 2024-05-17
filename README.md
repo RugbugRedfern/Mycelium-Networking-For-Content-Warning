@@ -242,6 +242,7 @@ Join the Content Warning Modding discord and @ me (@rugdev): https://discord.gg/
 - Sprinkles
 - [zatrit](https://github.com/zatrit)
 - [Xilophor](https://github.com/Xilophor)
+- [Notest](https://github.com/NotestQ)
 
 ### Playtesting
 - [Dubscr](https://www.youtube.com/dubscr)
