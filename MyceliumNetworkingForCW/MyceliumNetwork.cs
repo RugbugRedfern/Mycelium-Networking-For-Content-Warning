@@ -1,6 +1,7 @@
 ﻿using Steamworks;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -372,7 +373,7 @@ namespace MyceliumNetworking
 				RugLogger.LogWarning($"Accessing lobby data for unregistered key '{key}'. This might not exist.");
 			}
 
-			if(!SteamMatchmaking.SetLobbyData(Lobby, key, value.ToString()))
+            if (!SteamMatchmaking.SetLobbyData(Lobby, key, (string)Convert.ChangeType(value, typeof(string), CultureInfo.InvariantCulture)))
 			{
 				RugLogger.LogError("Error setting lobby data.");
 			}
@@ -424,7 +425,7 @@ namespace MyceliumNetworking
 
 			try
 			{
-				return (T)Convert.ChangeType(value, typeof(T));
+				return (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
 			}
 			catch(Exception ex)
 			{
@@ -452,7 +453,7 @@ namespace MyceliumNetworking
 				RugLogger.LogWarning($"Accessing player data for unregistered key '{key}'. This might not exist.");
 			}
 
-			SteamMatchmaking.SetLobbyMemberData(Lobby, key.ToString(), value.ToString());
+			SteamMatchmaking.SetLobbyMemberData(Lobby, key.ToString(), (string)Convert.ChangeType(value, typeof(string), CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>
@@ -503,7 +504,7 @@ namespace MyceliumNetworking
 			{
 				try
 				{
-					return (T)Convert.ChangeType(value, typeof(T));
+					return (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
 				}
 				catch(Exception ex)
 				{
