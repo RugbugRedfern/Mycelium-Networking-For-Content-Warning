@@ -15,7 +15,7 @@ Landfall has asked mod developers not to send lots of data through Photon, which
 ## Using RPCs
 
 ### Defining RPCs
-To define an RPC, simply add the [CustomRPC] attribute to a method:
+To define an RPC, simply add the `[CustomRPC]` attribute to a method:
 
 ```cs
 [CustomRPC]
@@ -93,7 +93,7 @@ The host can set lobby data using `MyceliumNetwork.SetLobbyData` and passing in 
 MyceliumNetwork.SetLobbyData("foo", "bar");
 ```
 
-Values are serialized as strings (Steam requires it), so any type that can be serialized as a string can be used. To serialize custom types, override the `.ToString()` method.
+Values are serialized as strings (Steam requires it), so any type that can be serialized as a string can be used. To serialize your own custom types you will need to convert them to a string yourself (and back from a string when you get the data).
 ```cs
 MyceliumNetwork.SetLobbyData("money", 123);
 MyceliumNetwork.SetLobbyData("scoreMultiplier", 12.52f);
