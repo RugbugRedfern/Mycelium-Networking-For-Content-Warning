@@ -10,12 +10,12 @@ using UnityEngine;
 
 namespace MyceliumNetworking
 {
-	[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-    public class PluginLoader : BaseUnityPlugin
+	[ContentWarningPlugin("RugbugRedfern.MyceliumNetworking", "1.0.14", false)]
+	public class PluginLoader
     {
 		static bool initialized;
 
-		void Awake()
+		static PluginLoader()
 		{
 			if(initialized)
 				return;
@@ -34,7 +34,7 @@ namespace MyceliumNetworking
 			var go = new GameObject("MyceliumNetworking Persistent");
 			go.AddComponent<PersistentGameObject>();
 			go.hideFlags = HideFlags.HideAndDontSave;
-			DontDestroyOnLoad(go);
+			GameObject.DontDestroyOnLoad(go);
 		}
 	}
 }

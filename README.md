@@ -5,6 +5,9 @@
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/RugbugRedfern/MyceliumNetworking?style=for-the-badge&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/content-warning/p/RugbugRedfern/MyceliumNetworking/)
 [![NuGet Version](https://img.shields.io/nuget/v/RugbugRedfern.MyceliumNetworking.CW?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/RugbugRedfern.MyceliumNetworking.CW)
 
+# Workshop Version
+This is the Steam Workshop version of the mod, uploaded by Rugbug Redfern to the Steam Workshop for Content Warning.
+
 ## A note
 Landfall has asked mod developers not to send lots of data through Photon, which is the networking solution mainly used by the game. This is because they have to pay for all the bandwidth that modders use. To solve this issue, this mod was created to be used as an alternative to Photon. With MyceliumNetworking, RPCs can be used in a very similar fashion to Photon without compromising on features.
 
