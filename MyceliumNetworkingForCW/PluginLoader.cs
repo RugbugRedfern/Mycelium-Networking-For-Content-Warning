@@ -1,5 +1,5 @@
-﻿using BepInEx;
-using HarmonyLib;
+﻿using HarmonyLib;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,11 @@ using UnityEngine;
 
 namespace MyceliumNetworking
 {
-	[ContentWarningPlugin("RugbugRedfern.MyceliumNetworking", "1.0.14", false)]
+	[ContentWarningPlugin("RugbugRedfern.MyceliumNetworking", VERSION, false)]
 	public class PluginLoader
     {
+		const string VERSION = "1.0.14";
+
 		static bool initialized;
 
 		static PluginLoader()
@@ -22,11 +24,9 @@ namespace MyceliumNetworking
 
 			initialized = true;
 
-			RugLogger.Initialize(MyPluginInfo.PLUGIN_GUID);
-
 			Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
-			RugLogger.Log("MyceliumNetworking Starting " + MyPluginInfo.PLUGIN_VERSION);
+			RugLogger.Log("MyceliumNetworking Starting " + VERSION);
 
 			MyceliumNetwork.Initialize();
 

@@ -1,85 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <!-- BepInEx Properties -->
-  <PropertyGroup>
-    <BepInExPluginGuid>RugbugRedfern.MyceliumNetworking</BepInExPluginGuid>
-    <AssemblyName>MyceliumNetworkingForCW</AssemblyName>
-    <Product>Mycelium Networking</Product>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Project Properties -->
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>MyceliumNetworking</RootNamespace>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-	<CWDir Condition=" '$(CWDir)' == '' ">E:\SteamLibrary\steamapps\common\Content Warning</CWDir>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <CWDir Condition=" '$(CWDir)' == '' ">E:\SteamLibrary\steamapps\common\Content Warning</CWDir>
+    </PropertyGroup>
 
-  <!-- <ItemGroup>
-    <Reference Include="$(CWDir)\Content Warning_Data\Managed\*.dll" Private="false"/>
-  </ItemGroup> -->
+    <ItemGroup>
+        <Reference Include="$(CWDir)\Content Warning_Data\Managed\*.dll" Private="false"/>
+    </ItemGroup>
 
-  <!-- Set NuGet Sources -->
-  <PropertyGroup>
-    <RestoreAdditionalProjectSources>
-      https://api.nuget.org/v3/index.json;
-      https://nuget.bepinex.dev/v3/index.json
-    </RestoreAdditionalProjectSources>
-  </PropertyGroup>
-
-  <!-- Disable Publicizer Warnings -->
-  <PropertyGroup>
-    <NoWarn>$(NoWarn);CS0436</NoWarn>
-  </PropertyGroup>
-
-  <!-- Embed Debug Symbols for Easier Debugging -->
-  <PropertyGroup>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
-    <!--
-    Trim the project path to prevent players from potentially
-    viewing Private Information in stack traces.
-    -->
-    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
-  </PropertyGroup>
-
-  <!-- NuGet Include README & Icon -->
-  <ItemGroup>
-    <None Include="$(ProjectDir)../README.md" Pack="true" PackagePath="/" />
-    <None Include="$(ProjectDir)./ts-assets/icon_128x128.png" Pack="true" PackagePath="/" />
-    <None Include="$(ProjectDir)../LICENSE.txt" Pack="true" PackagePath="/" />
-  </ItemGroup>
-
-  <!-- Primary Package References -->
-  <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all" />
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.10" PrivateAssets="all" />
-    <PackageReference Include="MinVer" Version="4.*" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
-  </ItemGroup>
-
-  <!-- References - Game Assemblies -->
-  <ItemGroup Condition="$(CI) != 'true'">
-	  <Reference Include="Assembly-CSharp" Publicize="true" Private="false">
-		  <HintPath>$(ManagedDirectory)Assembly-CSharp.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Steamworks.NET" Private="false">
-		  <HintPath>$(ManagedDirectory)com.rlabrecque.steamworks.net.dll</HintPath>
-	  </Reference>
-  </ItemGroup>
-
-  <!-- Package References - Game Assemblies -->
-  <ItemGroup Condition="$(CI) == 'true'">
-    <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" Publicize="true" PrivateAssets="all" />
-  </ItemGroup>
-  
-  <Target Name="CopyOutputFileToGame" AfterTargets="Build">
+    <Target Name="CopyOutputFileToGame" AfterTargets="Build">
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;preview.png" DestinationFolder="$(CWDir)\Plugins\$(MSBuildProjectName)"/>
-  </Target>
+    </Target>
+
 </Project>
